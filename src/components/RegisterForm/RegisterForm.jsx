@@ -1,37 +1,34 @@
 import { useDispatch } from 'react-redux';
-import { logIn } from '../../redux/auth/operations';
+import { register } from '../../redux/auth/operations';
 import { Formik, Form, Field, ErrorMessage } from 'formik';
 import { RiEye2Line, RiEyeCloseFill } from "react-icons/ri";
 import { useId, useState } from 'react';
 import * as Yup from "yup";
-import toast from 'react-hot-toast';
-import s from './LoginForm.module.css';
+import s from './RegisterForm.module.css';
 
-export const LoginForm = () => {
+export const RegisterForm = () => {
     const dispatch = useDispatch();
+    const nameFieldId = useId();
     const emailFieldId = useId();
     const passwordFieldId = useId();
     const [showPassword, setShowPassword] = useState(false);
 
     const initialValues = {
+        name: "",
         email: "",
         password: "",
     };
 
-
     const handleSubmit = (values, options) => {
-        dispatch(logIn(values))
-            .unwrap()
-            .then(() => {
-                toast.success('Login success');
-            })
-            .catch(() => {
-                toast.error("Login error. Please, try again.");
-            });
+        dispatch(register(values));
         options.resetForm();
     };
 
-    const LogInSchema = Yup.object().shape({
+    const RegisterSchema = Yup.object().shape({
+        name: Yup.string()
+            .min(3, "Too short!")
+            .max(50, "Too long!")
+            .required("Name is required"),
         email: Yup.string()
             .email("Invalid email format")
             .matches(/^[A-Z0-9._%+-]+@[A-Z0-9.-]+.[A-Z]{2,}$/i, "Invalid email format")
@@ -42,13 +39,26 @@ export const LoginForm = () => {
     });
 
     return (
-        <div className={s.logForm}>
+        <div className={s.regForm}>
             <Formik
                 initialValues={{ initialValues }}
                 onSubmit={handleSubmit}
-                validationSchema={LogInSchema}
+                validationSchema={RegisterSchema}
             >
                 <Form className={s.form}>
+                    <label className={s.label} htmlFor={nameFieldId}>
+                        Name
+                    </label>
+                    <Field className={s.input}
+                        name="name"
+                        type="text"
+                        id={nameFieldId}
+                        placeholder="Enter your name"
+                        autoComplete="name"
+                        required
+                    />
+                    <ErrorMessage className={s.error} name="name" component="span" />
+
                     <label className={s.label} htmlFor={emailFieldId}>
                         Email
                     </label>
@@ -61,7 +71,7 @@ export const LoginForm = () => {
                         required
                     />
                     <ErrorMessage className={s.error} name="email" component="span" />
-                    
+                            
                     <label className={s.label} htmlFor={passwordFieldId}>
                         Password
                     </label>
@@ -87,9 +97,9 @@ export const LoginForm = () => {
                         </button>
                     </div>
                     <ErrorMessage className={s.error} name="password" component="span" />
-
-                    <button className={s.btnLog} type='submit'>
-                        Log In
+        
+                    <button className={s.btnReg} type='submit'>
+                        Register
                     </button>
                 </Form>
             </Formik>

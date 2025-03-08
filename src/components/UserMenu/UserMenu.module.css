@@ -1,0 +1,43 @@
+.wrapper {
+    display: flex;
+    align-items: center;
+    gap: 12px;
+    color: beige;
+}
+
+.username {
+    font-weight: 700;
+}
+
+.btnOut {
+    padding: 5px 20px;
+        background-color: rgb(183, 255, 170);
+        border: none;
+        border-radius: 5px;
+        font-size: 14px;
+        font-weight: bold;
+        cursor: pointer;
+        transition: transform 0.2s ease, background-color 0.2s ease;
+        color: #280f3c;
+}
+
+.btnOut:hover,
+.btnOut:focus {
+    background-color: #37750e;
+    animation: pulse 1.5s infinite;
+    color: #fff6f6de;
+}
+
+@keyframes pulse {
+    0% {
+        transform: scale(1);
+    }
+
+    50% {
+        transform: scale(1.05);
+    }
+
+    100% {
+        transform: scale(1);
+    }
+}
